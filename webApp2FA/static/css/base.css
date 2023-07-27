@@ -1,0 +1,36 @@
+*, html, body {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+.base-container {
+    min-height: 100vh;
+}
+
+.base-nav {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    margin-bottom: 10px;
+}
+
+.base-footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    margin-top: auto;
+}   
+
+.base-link {
+    text-decoration: none;
+    color: lightblue;
+}
+
+.base-link:hover {
+    text-decoration: none;
+    color: lightgray;
+}

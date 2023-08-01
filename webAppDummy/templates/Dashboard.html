@@ -35,8 +35,14 @@
                         <a href="#" class="nav_link">Contact</a>
                     </li>
                 </ul>
-
-                <button class="button" id="form-open">Login</button>
+                {% if request.session.auth %}
+                    <form action="logout" method="POST">
+                        {% csrf_token %}
+                        <button tyoe="button" class="button">Logout</button>
+                    </form>
+                {% else %}
+                    <button class="button" id="form-open">Login</button>
+                {% endif %}
             </nav>
         </header>
 
@@ -44,18 +50,20 @@
         <section class="home">
             <div class="form_container">
                 <i class="uil uil-times form_close"></i>
+                
                 <!-- Login From -->
                 <div class="form login_form">   <!-- Try to edit later for functionality -->
-                    <form action="#">
+                    <form action="#" method="POST">
+                        {% csrf_token %}
                         <h2>Login</h2>
 
                         <div class="input_box">
-                            <input type="email" placeholder="Enter your email" required />
+                            <input type="email" placeholder="Enter your email" name="email" required />
                             <i class="uil uil-envelope-alt email"></i>
                         </div>
 
                         <div class="input_box">
-                            <input type="password" placeholder="Enter your password" required />
+                            <input type="password" placeholder="Enter your password" name="password" required />
                             <i class="uil uil-lock password"></i>
                             <i class="uil uil-eye-slash pw_hide"></i>
                         </div>
@@ -68,34 +76,35 @@
                             <a href="#" class="forgot_pw">Forgot password?</a>
                         </div>
             
-                        <button class="button">Login Now</button>
+                        <button class="button" name="button" value="login">Login Now</button>
 
                         <div class="login_signup">Don't have an account? <a href="#" id="signup">Signup</a></div>
                     </form>
                 </div>
 
                 
-                <!-- Signup From -->
+                <!-- Signup From -->    
                 <div class="form signup_form">
-                    <form action="#">
+                    <form action="#" method="POST">
+                        {% csrf_token %}
                         <h2>Signup</h2>
         
                         <div class="input_box">
-                        <input type="email" placeholder="Enter your email" required />
+                        <input type="email" placeholder="Enter your email" name="email" required />
                         <i class="uil uil-envelope-alt email"></i>
                         </div>
                         <div class="input_box">
-                        <input type="password" placeholder="Create password" required />
+                        <input type="password" placeholder="Create password" name="password" required />
                         <i class="uil uil-lock password"></i>
                         <i class="uil uil-eye-slash pw_hide"></i>
                         </div>
                         <div class="input_box">
-                        <input type="password" placeholder="Confirm password" required />
+                        <input type="password" placeholder="Confirm password" name="password2" required />
                         <i class="uil uil-lock password"></i>
                         <i class="uil uil-eye-slash pw_hide"></i>
                         </div>
         
-                        <button class="button">Signup Now</button>
+                        <button class="button" name="button" value="signup">Signup Now</button>
         
                         <div class="login_signup">Already have an account? <a href="#" id="login">Login</a></div>
                     </form>
@@ -105,5 +114,17 @@
 
         <script src="{% static 'js/dashboardscript.js' %}"></script>
     </body>
+    
+    {% if alert_error %}
+        <script>
+            alert("{{ alert_error }}");
+        </script>
+    {% endif %}
+
+    {% if request.session.message %}
+        <script>
+            alert("{{ request.session.message }}");
+        </script>
+    {% endif %}
 
 </html>

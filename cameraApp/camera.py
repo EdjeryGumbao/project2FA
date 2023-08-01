@@ -3,10 +3,15 @@ import cv2
 import os
 import face_recognition
 import numpy as np
+from django.shortcuts import render, redirect
+
 
 class VideoCamera(object):
-    def __init__(self):
+    def __init__(self, request, currentUser):
         self.video = cv2.VideoCapture(0)
+        self.currentUser = currentUser
+        self.request = request
+        self.match_value = None
 
         self.video.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter.fourcc('m','j','p','g'))
 
@@ -45,7 +50,7 @@ class VideoCamera(object):
         self.video.release()
         
     # This function is used in views
-    def get_frame(self):
+    def get_frame(self, request):
         success, self.image = self.video.read()
 
         facesCurFrame = face_recognition.face_locations(self.image)
@@ -54,18 +59,29 @@ class VideoCamera(object):
         for encodeFace,faceloc in zip(encodesCurFrame,facesCurFrame):
                 matches = face_recognition.compare_faces(self.encodeListKnown, encodeFace)
                 faceDis = face_recognition.face_distance(self.encodeListKnown, encodeFace)
-                print(faceDis)
+                # print(faceDis)
                 matchIndex = np.argmin(faceDis)
                 
                 if matches[matchIndex]:
                     name = self.classNames[matchIndex].upper()
-                    print(name)
-                    y1, x2, y2, x1 = faceloc
-                    cv2.rectangle(self.image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-                    cv2.rectangle(self.image, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
-                    cv2.putText(self.image, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+                    # # print(name)
+                    # y1, x2, y2, x1 = faceloc
+                    # cv2.rectangle(self.image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                    # cv2.rectangle(self.image, (x1, y2 - 35), (x2, y2), (0, 255, 0), cv2.FILLED)
+                    # cv2.putText(self.image, name, (x1 + 6, y2 - 6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2)
+
+                    text = "Done, Click next"
+                    cv2.putText(self.image, text, (10, 30), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
+
+                    # from webAppDummy.views import login as dummyLogin
+                    # return dummyLogin(self.request, name)
+                    request.session['match_value'] = 'ed@usep.edu.ph'
 
         # Encode the frame as JPEG
         ret, jpeg = cv2.imencode('.png', self.image)
 
         return jpeg.tobytes()
+    
+    # def get_match_value(self, value):
+    #     self.match_value = value
+    #     return value

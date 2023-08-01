@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'cameraApp',
 ]
 
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -126,6 +127,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR / 'webAppDummy/static'),
     # Add more app-specific static folders here if needed
 ]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

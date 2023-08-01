@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Register</title>
+    <title>Log in</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -23,12 +23,12 @@
         <!-- /.login-logo -->
         <div class="card">
             <div class="card-body login-card-body">
-                <p class="login-box-msg">Register a new account</p>
+                <p class="login-box-msg">Sign in to start your session</p>
 
-                <form action="home" method="post">
+                <form action="login" method="POST">
                     {% csrf_token %}
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Username">
+                        <input type="text" class="form-control" placeholder="Username" name="username">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -36,27 +36,18 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" placeholder="Password" name="password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
                     </div>
-                    
-                    <p>Upload a picture of yourself here</p>
-                    <!-- File upload input -->
-                    <div class="input-group mb-3">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="image" name="image">
-                            <label class="custom-file-label" for="image">Choose file</label>
-                        </div>
-                    </div>
-                    
+
                     <div class="row">
                         <div class="col">
                             <p class="mb-0">
-                                <a href="login" class="text-center">Already have an account?</a>
+                                <a href="register" class="text-center">Register</a>
                             </p>
                         </div>
                     </div>
@@ -72,12 +63,16 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
                         </div>
                         <!-- /.col -->
                     </div>
                 </form>
-
+                    {% if messages %}
+                        {% for message in messages %}
+                            <p class="text-danger"> {{ message }} </p>
+                        {% endfor %}
+                    {% endif %}
             </div>
             <!-- /.login-card-body -->
         </div>

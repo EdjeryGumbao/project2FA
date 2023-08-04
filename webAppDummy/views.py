@@ -72,7 +72,7 @@ def authenFace(request):
     return cameraIndex(request)
 
 
-def logout(request):
+def dummylogout(request):
     request.session.clear()  # Remove all session data
     request.session['message'] = 'You are now logged out'
     return redirect('dummydashboard')

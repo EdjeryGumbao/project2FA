@@ -25,7 +25,7 @@
             <div class="card-body login-card-body">
                 <p class="login-box-msg">Register a new account</p>
 
-                <form action="{% url 'register' %}" method="POST" enctype="multipart/form-data">
+                <form action="{% url 'register_user' %}" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
 
                     {{ form }}
@@ -36,7 +36,7 @@
                     <!-- File upload input -->
                     <div class="input-group mb-3">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="image" name="image">
+                            <input type="file" class="custom-file-input" id="image" name="image" onchange="updateFileName(this)">
                             <label class="custom-file-label" for="image">Choose file</label>
                         </div>
                     </div>
@@ -89,3 +89,11 @@
 
 </body>
 </html>
+
+<script>
+    function updateFileName(input) {
+        var fileName = input.files[0].name;
+        var label = input.nextElementSibling;
+        label.textContent = fileName;
+    }
+</script>

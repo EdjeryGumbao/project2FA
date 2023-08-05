@@ -3,7 +3,9 @@ from .models import DummyUser
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from cameraApp.views import index as cameraIndex
+from webApp2FA.models import WebsiteList
 
+website_url = 'dummy'
 
 def dummyDashboard(request):
     context={} # This is a dictionary, You can add DB tables values here later
@@ -34,10 +36,17 @@ def dummyDashboard(request):
             password = request.POST['password']
 
             try:
-                user = DummyUser.objects.get(Email=email)      
+                user = DummyUser.objects.get(Email=email)
                     
                 if user and check_password(password, user.Password):
-                    return cameraIndex(request, email)
+                    try:
+                        website = WebsiteList.objects.get(websiteUrl=website_url, username=email)
+                        if website:
+                            return cameraIndex(request, email)
+                    except WebsiteList.DoesNotExist:
+                        request.session['auth'] = True
+                        request.session['message'] = 'Successfully Logged in'
+                    
                 else:
                     context['alert_error'] = 'Error: Passwords do not match.'
             except DummyUser.DoesNotExist:

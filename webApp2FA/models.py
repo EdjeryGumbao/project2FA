@@ -8,7 +8,7 @@ class UserImage(models.Model):
 
     def __str__(self):
         return self.userID.username
-    
+
 class IntruderImage(models.Model):
     IntruderImageID = models.AutoField(primary_key=True)
     userID = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -17,12 +17,13 @@ class IntruderImage(models.Model):
 
     def __str__(self):
         return self.userID.username
-    
+
 class WebsiteList(models.Model):
     websiteListID = models.AutoField(primary_key=True)
     userID = models.ForeignKey(User, on_delete=models.CASCADE)
     websiteName = models.CharField(max_length=100, default='Website')
     websiteUrl = models.URLField()
+    username = models.CharField(max_length=100, null=False)
     created_At = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

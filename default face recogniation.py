@@ -3,16 +3,8 @@ import cv2
 import os
 import face_recognition
 import numpy as np
-from webApp2FA.models import WebsiteList, UserImage
+from django.shortcuts import render, redirect
 
-import os
-from django.conf import settings
-
-def get_selfieimage_path(image_filename):
-    # Construct the absolute file path to the image
-    media_root = settings.MEDIA_ROOT
-    selfieimage_path = os.path.join(media_root, 'selfieimage', image_filename)
-    return selfieimage_path
 
 class VideoCamera(object):
     def __init__(self, request, currentUser):
@@ -33,28 +25,18 @@ class VideoCamera(object):
 
         # Set the camera resolution to the desired values
         set_camera_resolution(self.video, desired_width, desired_height)
-        
-        website = WebsiteList.objects.get(username=self.currentUser)
-        try:
-            user_image = UserImage.objects.get(userID=website.userID)
-        except UserImage.DoesNotExist:
-            user_image = None
 
-        path = user_image.userImage.url.lstrip('/')  # example: 'cameraApp/images/ed.png' 'media/selfieimages/ed_EYWq4vT.png'
-        # path = path.replace('/', '\\')
-        print(path)
+        path = 'cameraApp/images'
         images = []
         self.classNames = []
+        myList = os.listdir(path)
 
-        curImg = cv2.imread(path)
-        images.append(curImg)
+        for cl in myList:
+            curImg = cv2.imread(f'{path}/{cl}')
+            images.append(curImg)
+            self.classNames.append(os.path.splitext(cl)[0])
 
-        self.classNames.append(os.path.splitext(os.path.basename(path))[0])
-
-        print(self.classNames)  # Output: ['image1']
-        print(len(images))  # Output: 1
-            
-        def findEncodings(images):  
+        def findEncodings(images):
             encodeList = []
             for img in images:
                 img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -82,7 +64,6 @@ class VideoCamera(object):
                 
                 if matches[matchIndex]:
                     name = self.classNames[matchIndex].upper()
-
                     # # print(name)
                     # y1, x2, y2, x1 = faceloc
                     # cv2.rectangle(self.image, (x1, y1), (x2, y2), (0, 255, 0), 2)
@@ -94,7 +75,7 @@ class VideoCamera(object):
 
                     # from webAppDummy.views import login as dummyLogin
                     # return dummyLogin(self.request, name)
-                    request.session['match_value'] = self.currentUser
+                    request.session['match_value'] = 'ed@usep.edu.ph'
 
         # Encode the frame as JPEG
         ret, jpeg = cv2.imencode('.png', self.image)

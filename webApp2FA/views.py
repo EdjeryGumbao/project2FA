@@ -109,9 +109,10 @@ def add_website(request):
         # Website Registration
         websiteName = request.POST['websiteName']
         websiteUrl = request.POST['websiteUrl']
+        username = request.POST['username']
         userID = request.user
         
-        new_WebsiteList = WebsiteList(websiteName=websiteName, websiteUrl=websiteUrl, userID=userID)
+        new_WebsiteList = WebsiteList(websiteName=websiteName, websiteUrl=websiteUrl, userID=userID, username=username)
         new_WebsiteList.save()
         return redirect('home')
     else:

@@ -18,7 +18,7 @@
 <body class="hold-transition login-page">
     <div class="login-box">
         <div class="login-logo">
-            <a href="home"><b>Authen</b>Face</a>
+            <a href="{% url 'home' %}"><b>Authen</b>Face</a>
         </div>
         <!-- /.login-logo -->
         <div class="card">
@@ -36,7 +36,7 @@
                     <!-- File upload input -->
                     <div class="input-group mb-3">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="image" name="image" onchange="updateFileName(this)">
+                            <input type="file" class="custom-file-input" id="image" name="image" accept="image/*" onchange="updateFileName(this)" >
                             <label class="custom-file-label" for="image">Choose file</label>
                         </div>
                     </div>

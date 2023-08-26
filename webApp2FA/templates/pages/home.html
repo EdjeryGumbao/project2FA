@@ -19,7 +19,7 @@ AuthenFace
                 <div class="e-navlist e-navlist--active-bg">
                     <ul class="nav">
                         <li class="nav-item"><a class="nav-link px-2 active" href="home"><i class="fa fa-fw fa-bar-chart mr-1"></i><span>Home</span></a></li>
-                        <!-- <li class="nav-item"><a class="nav-link px-2" href="gallery"><i class="fa fa-fw fa-th mr-1"></i><span>Gallery</span></a></li> -->
+                        <li class="nav-item"><a class="nav-link px-2" href="gallery"><i class="fa fa-fw fa-th mr-1"></i><span>Gallery</span></a></li>
                         <li class="nav-item"><a class="nav-link px-2" href="profile"><i class="fa fa-fw fa-cog mr-1"></i><span>Profile</span></a></li>
                     </ul>
                 </div>
@@ -51,8 +51,8 @@ AuthenFace
                     <tr> 
                       <th>Website</th> 
                       <th>URL</th> 
+                      <th>Username/Email</th> 
                       <th>Actions</th>
-                      
                     </tr>
                   </thead>
                   <tbody>
@@ -62,6 +62,7 @@ AuthenFace
                             <tr>
                                 <td class="text-nowrap align-middle">{{ website.websiteName }}</td>
                                 <td class="text-nowrap align-middle">{{ website.websiteUrl }}</td>
+                                <td class="text-nowrap align-middle">{{ website.username }}</td>
                                 
                                 <td class="text-center align-middle">
                                     <div class="btn-group align-top">
@@ -69,7 +70,7 @@ AuthenFace
                                         {% csrf_token %}
                                         <a href="{{ website.websiteUrl }}" class="btn btn-sm btn-outline-secondary badge" target="_blank">Visit</a>
                                         <input type="hidden" name="websiteListID" value="{{ website.websiteListID }}">
-                                        <!-- <button name="button" value="edit" class="btn btn-sm btn-outline-secondary badge" type="submit">Edit</button> -->
+                                        <a href="{% url 'edit_website' website_id=website.websiteListID %}" class="btn btn-sm btn-outline-secondary badge">Edit</a>
                                         <button name="button" value="delete" class="btn btn-sm btn-outline-secondary badge" type="submit" onclick="return confirmDelete()"><i class="fa fa-trash"></i></button>
                                       </form>
                                     </div>

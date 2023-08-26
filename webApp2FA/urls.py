@@ -11,6 +11,8 @@ urlpatterns = [
     path('register', views.register_user, name='register_user'),
 
     path('add_website', views.add_website, name='add_website'),
+    path('edit_website/<int:website_id>/', views.edit_website, name='edit_website'),
+
     # path('websiteAction', views.websiteAction, name='websiteAction'),
 
     path('profile', views.profile, name='profile'),

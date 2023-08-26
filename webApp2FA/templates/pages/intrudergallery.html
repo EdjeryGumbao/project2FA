@@ -11,6 +11,29 @@ AuthenFace
     body{
     background:#f8f8f8
 }
+
+.image-container {
+        position: relative;
+        display: inline-block;
+        }
+
+        .view-text {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(0, 0, 0, 0.8);
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-size: 14px;
+        opacity: 0; /* Hide the text by default */
+        transition: opacity 0.3s ease;
+        }
+
+        .image-container:hover .view-text {
+        opacity: 1; /* Show the text when the container is hovered */
+        }
 </style>
 <div class="container">
     <div class="row flex-lg-nowrap">
@@ -54,23 +77,53 @@ AuthenFace
                   <tbody>
                     
                     {% for image in page_obj %}
-                    <tr>
-                        <td class="text-nowrap align-middle">{{ image.intruderImage }}</td>
-                        <td class="text-nowrap align-middle">{{ image.uploaded_at }}</td>
-                        <td class="text-center align-middle">
-                            <div class="btn-group align-top">
-                              <form action="{% url 'home' %}" method="POST">
-                                {% csrf_token %}
-                                <input type="hidden" name="image" value="{{ image.websiteListID }}">
-                                <button name="button" value="delete" class="btn btn-sm btn-outline-secondary badge" type="submit" onclick="return confirmDelete()"><i class="fa fa-trash"></i></button>
-                              </form>
-                            </div>
-                        </td>
-                    </tr>
+                      {% if image.userID.id == user.id %}
+                      <tr>
+                          <td>
+                              <a href="/media/intruderimages/{{ image.FailedAuthenImage }}" target="_blank">
+                                  <div class="image-container">
+                                      <img src="{{ STATIC_URL }}media/intruderimages/{{ image.FailedAuthenImage }}" class="card-img-top" height="50">
+                                      <span class="view-text">View</span>
+                                  </div>
+                              </a>
+                          </td>
+                      
+                          <td class="text-nowrap align-middle">{{ image.uploaded_at }}</td>
+                          <td class="text-center align-middle">
+                              <div class="btn-group align-top">
+                                <form action="{% url 'gallery' %}" method="POST">
+                                  {% csrf_token %}
+                                  <input type="hidden" name="FailedAuthenID" value="{{ image.FailedAuthenID }}">
+                                  <button name="button" value="delete" class="btn btn-sm btn-outline-secondary badge" type="submit" onclick="return confirmDelete()"><i class="fa fa-trash"></i></button>
+                                </form>
+                              </div>
+                          </td>
+                      </tr>
+                      {% endif %} 
                     {% endfor %}
                     
                   </tbody>
                 </table>
+              </div>
+
+              
+              <!-- Display pagination links -->
+              <div class="d-flex justify-content-center">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
               </div>
             </div>
           </div>
@@ -80,5 +133,21 @@ AuthenFace
   </div>
 </div>
 </div>
+
+{% if alert_error %}
+<script>
+    alert("{{ alert_error }}");
+</script>
+{% endif %}
+
+<script>
+  function confirmDelete() {
+      // Show a pop-up dialog with a confirmation message
+      const confirmation = confirm("Are you sure you want to delete this? This action cannot be undone.");
+
+      // If the user clicks "OK," the form will be submitted; otherwise, the deletion process will be canceled.
+      return confirmation;
+  }
+</script>
 
 {% endblock %}

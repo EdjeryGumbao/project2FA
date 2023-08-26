@@ -13,40 +13,64 @@
             margin: 0; /* Remove default margin to avoid unwanted spacing */
         }
 
-        h1 {
+        h1, h4 {
             color: white; /* Set the color of the h1 text to white */
+        }
+        
+        /* Styling for the button container */
+        .button-container {
+            margin-top: 20px; /* Add some space above the buttons */
+            text-align: center; /* Center the buttons horizontally */
         }
 
         /* Styling for the button */
         .nice-button {
-        display: inline-block;
-        padding: 10px 20px;
-        background-color: #4CAF50; /* Green background color */
-        color: white; /* White text color */
-        border: none; /* Remove default border */
-        border-radius: 5px; /* Rounded corners */
-        font-size: 16px;
-        cursor: pointer;
-        transition: background-color 0.3s ease; /* Smooth transition on hover */
+            display: inline-block; /* Display buttons horizontally */
+            margin-right: 10px; /* Add some space between the buttons */
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
         }
 
         /* Style when hovering over the button */
         .nice-button:hover {
-        background-color: #45a049; /* Darker green on hover */
+            background-color: #45a049;
         }
 
         /* Style when the button is clicked */
         .nice-button:active {
-        background-color: #3e8e41; /* Even darker green when clicked */
+            background-color: #3e8e41;
         }
 
     </style>
+    <!-- <script>
+        function screenshot_image() {
+            // alert('Screenshot taken')
+            window.location.href = "{% url 'authenFace' %}";
+        }
+        // Update the image every 1000 milliseconds (1 second)
+        setInterval(screenshot_image, 10000);
+    </script> -->
 </head>
 <body>
     <h1>
         Authenticating...
     </h1>
-    <img src="{% url 'video_feed' %}">
-    <br><a href="{% url 'authenFace' %}" class="nice-button">Next</a>
+    <h4>Take the photo when ready</h4>
+    <img id="camera-feed" src="{% url 'video_feed' %}">
+    <br>
+    <div class="button-container">
+        <a href="{% url 'dummydashboard' %}" class="nice-button">Back</a>
+        <a href="{% url 'authenFace' %}" class="nice-button">Take Photo</a>
+    </div>
+    
 </body>
+
 </html>
+

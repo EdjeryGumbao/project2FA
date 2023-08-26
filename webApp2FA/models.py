@@ -9,10 +9,10 @@ class UserImage(models.Model):
     def __str__(self):
         return self.userID.username
 
-class IntruderImage(models.Model):
-    IntruderImageID = models.AutoField(primary_key=True)
-    userID = models.OneToOneField(User, on_delete=models.CASCADE)
-    intruderImage = models.ImageField(upload_to='intruderimages/', blank=True, null=True)
+class FailedAuthen(models.Model):
+    FailedAuthenID = models.AutoField(primary_key=True)
+    userID = models.ForeignKey(User, on_delete=models.CASCADE)
+    FailedAuthenImage = models.CharField(max_length=255, blank=True, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

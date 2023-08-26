@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from .models import DummyUser
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
-from cameraApp.views import index as cameraIndex
 from webApp2FA.models import WebsiteList
 
-website_url = 'dummy'
+from cameraApp.camera import VideoCamera
+from cameraApp.views import index as cameraIndex
+
+website_url = 'http://127.0.0.1:8000/dummy/'
 
 def dummyDashboard(request):
     context={} # This is a dictionary, You can add DB tables values here later
@@ -21,7 +23,7 @@ def dummyDashboard(request):
             email = request.POST['email']
             password = request.POST['password']
             password2 = request.POST['password2']
-            
+
             if password == password2:
                 new_DummyUser = DummyUser(Email=email, Password=make_password(password))
                 new_DummyUser.save()
@@ -34,19 +36,22 @@ def dummyDashboard(request):
         elif request.POST['button'] == 'login':
             email = request.POST['email']
             password = request.POST['password']
-
+            
             try:
                 user = DummyUser.objects.get(Email=email)
                     
                 if user and check_password(password, user.Password):
                     try:
-                        website = WebsiteList.objects.get(websiteUrl=website_url, username=email)
+                        website = WebsiteList.objects.filter(websiteUrl=website_url, username=email).first()
+                        print(website)
                         if website:
-                            return cameraIndex(request, email)
+                            return cameraIndex(request, email, website_url)
+                        else:     
+                            request.session['auth'] = True
+                            context['alert_error'] = 'Successfully Logged in'
                     except WebsiteList.DoesNotExist:
                         request.session['auth'] = True
-                        request.session['message'] = 'Successfully Logged in'
-                    
+                        context['alert_error'] = 'Successfully Logged in'
                 else:
                     context['alert_error'] = 'Error: Passwords do not match.'
             except DummyUser.DoesNotExist:
@@ -60,18 +65,15 @@ def login(request, name):
     currentUser = request.session.get('currentUser')
     # print (currentUser)
     # print (name)
-    request.session.clear()  # Remove all session data
     if name == currentUser:
         # print('correct in')
         request.session['auth'] = True
         request.session['message'] = 'Successfully Logged in'
-        print(request.session['auth'])
     else:
-        print('error in')
+        print('error in logging in')
         request.session['message'] = 'Error: Face authentication failed.'
         
     return redirect('dummydashboard')
-    
 
 def dummytest(request):
     authenFace(request)
@@ -80,8 +82,14 @@ def dummytest(request):
 def authenFace(request):
     return cameraIndex(request)
 
-
 def dummylogout(request):
-    request.session.clear()  # Remove all session data
+    dummySessionList = ['auth', 'currentUser', 'message', 'match_value', 'website_url', 'image_path', 'filename']
+    remove_sessions_from_list(request, dummySessionList)
     request.session['message'] = 'You are now logged out'
     return redirect('dummydashboard')
+
+def remove_sessions_from_list(request, session_key_list):
+    for session_key in session_key_list:
+        if session_key in request.session:
+            del request.session[session_key]
+    request.session.save()
